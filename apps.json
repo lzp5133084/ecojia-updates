@@ -1,0 +1,18 @@
+{
+  "meta": {
+    "name": "军哥懂保 · 全栈更新中心",
+    "author": "军哥懂保",
+    "wechat": "xunijiayuan",
+    "updated": "2026-11-05",
+    "base": "https://ecojia.cn/updates/",
+    "spec": "每个应用一份 version.json（清单）；客户端启动时静默拉取比对 versionCode，有新版弹窗提示，用户确认后下载→校验SHA256→安装/替换",
+    "api": "GET /updates/apps.json 全量清单；GET /updates/<appid>/version.json 单应用清单；CORS 开放，供任意程序调用"
+  },
+  "apps": [
+    {"app": "doubao-ball", "name": "豆包悬浮球", "platform": "apk", "desc": "豆包AI悬浮球助手（安卓）", "manifest": "https://ecojia.cn/updates/doubao-ball/version.json", "home": ""},
+    {"app": "duomaji", "name": "多码集", "platform": "exe", "desc": "二维码工具箱（Windows 桌面版）", "manifest": "https://ecojia.cn/updates/duomaji/version.json", "home": "https://ecojia.cn/duomaji/"},
+    {"app": "lead-radar", "name": "客资雷达", "platform": "exe", "desc": "真实公开需求采集（Windows 桌面版）", "manifest": "https://ecojia.cn/updates/lead-radar/version.json", "home": "https://tools.ecojia.cn/lead-radar/"},
+    {"app": "claims-doc-assistant", "name": "理赔资料助手", "platform": "exe", "desc": "理赔材料整理与进度跟踪（Windows 桌面版）", "manifest": "https://ecojia.cn/updates/claims-doc-assistant/version.json", "home": "https://tools.ecojia.cn/claims-doc-assistant/"},
+    {"app": "fenshen-pangguan", "name": "分身旁观", "platform": "exe", "desc": "个人语料记录系统（Windows 桌面版）", "manifest": "https://ecojia.cn/updates/fenshen-pangguan/version.json", "home": "https://tools.ecojia.cn/fenshen-pangguan/"}
+  ]
+}

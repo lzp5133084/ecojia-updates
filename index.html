@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="author" content="军哥懂保">
+<meta name="description" content="军哥懂保全栈更新中心：所有 APK / EXE 程序的统一自动更新分发站，迭代发版后客户端自动提示更新。">
+<title>更新中心 · 全栈自动更新 · 数字生态家园</title>
+<style>
+:root{color-scheme:dark;--bg:#14101f;--gold:#f0c75e;--gold-hi:#f7dd9a;--violet:#c084fc;--cyan:#5eead4;
+--grad:linear-gradient(135deg,#f0c75e 0%,#c084fc 55%,#5eead4 110%);
+--card:rgba(46,32,68,.55);--card-hi:rgba(120,60,160,.16);
+--border:rgba(192,132,252,.22);--border-hi:rgba(240,199,94,.55);--text:#f5f0fb;--muted:#ab9fc4;--green:#34d399;--blue:#60a5fa}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--text);min-height:100vh;line-height:1.7;
+font-family:"HarmonyOS Sans SC","MiSans","PingFang SC","Microsoft YaHei",sans-serif}
+.aurora{position:fixed;inset:0;z-index:-2;pointer-events:none;
+background:radial-gradient(58% 40% at 50% -5%,rgba(192,132,252,.18),transparent 60%),
+radial-gradient(40% 30% at 88% 22%,rgba(240,199,94,.12),transparent 65%),
+radial-gradient(36% 30% at 8% 30%,rgba(94,234,212,.08),transparent 60%)}
+.grid-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.2;
+background-image:linear-gradient(rgba(192,132,252,.07) 1px,transparent 1px),
+linear-gradient(90deg,rgba(240,199,94,.07) 1px,transparent 1px);background-size:56px 56px;
+mask-image:radial-gradient(75% 60% at 50% 0%,#000 30%,transparent 100%);
+-webkit-mask-image:radial-gradient(75% 60% at 50% 0%,#000 30%,transparent 100%)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px 60px}
+
+/* 顶栏 */
+.topbar{position:sticky;top:0;z-index:30;backdrop-filter:blur(14px);background:rgba(20,16,31,.78);
+border-bottom:1px solid var(--border)}
+.top-in{max-width:1120px;margin:0 auto;padding:11px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.mark{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:10px;
+font-size:16px;font-weight:800;background:var(--grad);color:#241031;box-shadow:0 0 16px rgba(192,132,252,.45)}
+.bname{font-size:16px;font-weight:800;letter-spacing:1px;background:var(--grad);
+-webkit-background-clip:text;background-clip:text;color:transparent}
+.top-in nav{margin-left:auto;display:flex;gap:4px;flex-wrap:wrap}
+.top-in nav a{padding:6px 12px;border-radius:9px;font-size:12.5px;color:var(--muted);text-decoration:none;transition:.18s}
+.top-in nav a:hover{color:var(--gold-hi);background:var(--card-hi)}
+
+/* Hero */
+.hero{text-align:center;padding:56px 0 30px}
+.hero .tag{display:inline-block;font-size:12px;color:var(--gold-hi);border:1px solid var(--border-hi);
+border-radius:999px;padding:5px 16px;letter-spacing:2px;background:rgba(240,199,94,.07)}
+.hero h1{font-size:clamp(30px,5vw,46px);margin:18px 0 10px;letter-spacing:3px;
+background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:800}
+.hero p{color:var(--muted);font-size:14px;max-width:46em;margin:0 auto}
+
+/* 统计 */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:34px}
+.stat{border-radius:16px;padding:15px 18px;border:1px solid var(--border);
+background:linear-gradient(135deg,rgba(192,132,252,.14),rgba(240,199,94,.05))}
+.stat .n{font-size:24px;font-weight:800;color:var(--gold-hi);line-height:1.25}
+.stat .l{font-size:12px;color:var(--muted);margin-top:3px}
+
+/* 区块标题 */
+.sec{display:flex;align-items:baseline;gap:12px;margin:44px 0 18px}
+.sec-no{font-size:12px;font-weight:800;color:var(--cyan);letter-spacing:2px}
+.sec-t{font-size:20px;font-weight:800;color:var(--gold-hi);letter-spacing:1px}
+.sec-line{flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
+
+/* 应用卡片 */
+.apps{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.app{border-radius:18px;padding:20px;background:var(--card);border:1px solid var(--border);
+backdrop-filter:blur(8px);transition:.25s;position:relative;overflow:hidden}
+.app:hover{transform:translateY(-3px);border-color:var(--border-hi);box-shadow:0 18px 44px rgba(0,0,0,.45)}
+.app .plat{position:absolute;top:14px;right:14px;font-size:10.5px;font-weight:800;letter-spacing:1px;
+padding:3px 10px;border-radius:999px}
+.plat-apk{color:#0d1512;background:var(--green)}
+.plat-exe{color:#0d1420;background:var(--blue)}
+.app h3{font-size:17px;color:var(--gold-hi)}
+.app .id{font-size:11px;color:var(--muted);margin:2px 0 10px}
+.app .ver{display:flex;gap:14px;font-size:12.5px;color:var(--muted);flex-wrap:wrap;margin-bottom:10px}
+.app .ver b{color:var(--text);font-weight:600}
+.app .log{font-size:12.5px;color:var(--muted);background:rgba(20,16,31,.5);border:1px solid rgba(255,255,255,.06);
+border-radius:10px;padding:9px 12px;min-height:52px}
+.app .ops{display:flex;gap:8px;margin-top:13px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:6px;border-radius:10px;padding:8px 15px;font-size:12.5px;
+font-weight:700;text-decoration:none;border:0;cursor:pointer;transition:.2s;font-family:inherit}
+.btn-gold{color:#241031;background:linear-gradient(135deg,var(--gold-hi),var(--gold));
+box-shadow:0 8px 20px rgba(240,199,94,.25)}
+.btn-gold:hover{transform:translateY(-1px)}
+.btn-ghost{color:var(--gold-hi);border:1px solid var(--border);background:rgba(240,199,94,.05)}
+.btn-ghost:hover{background:rgba(240,199,94,.12)}
+.btn-off{color:var(--muted);border:1px dashed rgba(255,255,255,.15);background:transparent;cursor:default}
+
+/* 开发者接入 */
+.dev{border-radius:18px;padding:22px;background:var(--card);border:1px solid var(--border)}
+.dev p{font-size:13px;color:var(--muted);margin-bottom:12px}
+.dev ol{font-size:13px;color:var(--muted);padding-left:20px;line-height:2.1}
+.dev b,.dev code{color:var(--text)}
+.dev code{background:rgba(20,16,31,.6);border:1px solid rgba(255,255,255,.08);border-radius:6px;
+padding:1px 7px;font-size:12px}
+.sdks{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 18px}
+
+/* 使用说明 */
+.help{border-radius:18px;padding:20px 22px;background:linear-gradient(135deg,rgba(240,199,94,.08),rgba(46,32,68,.7));
+border:1px solid var(--border-hi)}
+.help h3{font-size:15px;color:var(--gold-hi);margin-bottom:8px}
+.help p{font-size:12.5px;color:var(--muted);line-height:2}
+.help b{color:var(--text)}
+
+/* 名词解析 ? */
+.q{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;
+border:1px solid var(--border-hi);color:var(--gold-hi);font-size:10px;cursor:help;vertical-align:2px;
+margin-left:3px;position:relative;user-select:none}
+.q:hover::after{content:attr(data-tip);position:absolute;left:50%;bottom:130%;transform:translateX(-50%);
+width:max-content;max-width:250px;background:#241b38;border:1px solid var(--border-hi);color:var(--text);
+font-size:11.5px;line-height:1.7;padding:8px 12px;border-radius:10px;z-index:60;white-space:normal;
+box-shadow:0 10px 30px rgba(0,0,0,.6);text-align:left;font-weight:400}
+
+/* 页脚 */
+.footer{margin-top:52px;padding-top:22px;border-top:1px solid var(--border);text-align:center;
+color:var(--gold);font-size:12px;line-height:2.1;opacity:.92}
+.footer b{color:var(--gold-hi)}
+.toast{position:fixed;left:50%;bottom:34px;transform:translateX(-50%) translateY(20px);opacity:0;
+background:#241b38;border:1px solid var(--border-hi);color:var(--text);font-size:13px;
+padding:11px 20px;border-radius:12px;z-index:99;transition:.3s;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}.hero{padding:40px 0 24px}}
+</style>
+</head>
+<body>
+<div class="aurora"></div><div class="grid-bg"></div>
+
+<header class="topbar"><div class="top-in">
+ <span class="mark">更</span><span class="bname">全栈更新中心</span>
+ <nav>
+  <a href="https://ecojia.cn">门户首页</a>
+  <a href="https://ecojia.cn/tools">工具清单</a>
+  <a href="https://ecojia.cn/mm/">秘密MM</a>
+ </nav>
+</div></header>
+
+<div class="wrap">
+
+ <div class="hero">
+  <span class="tag">APK ・ EXE ・ 统一自动更新</span>
+  <h1>更新中心</h1>
+  <p>全栈程序的统一发版与自动更新分发站：每次迭代只需在这里发布一个新版本，<br>
+  所有已安装的 APK 和 EXE 下次打开时会自动弹窗提示，用户确认后自动下载、校验、升级。</p>
+ </div>
+
+ <div class="stats" id="stats"></div>
+
+ <!-- 应用列表 -->
+ <div class="sec"><span class="sec-no">01</span><span class="sec-t">已接入的应用</span><span class="sec-line"></span></div>
+ <div class="apps" id="apps"><p style="color:var(--muted);font-size:13px">正在加载清单…</p></div>
+
+ <!-- 开发者接入 -->
+ <div class="sec"><span class="sec-no">02</span><span class="sec-t">开发者接入（3 行代码）</span><span class="sec-line"></span></div>
+ <div class="dev">
+  <p>新程序想拥有自动更新能力，只需：① 让作者把你的 appid 注册进更新中心 ② 在程序里接入对应 SDK ③ 以后发版运行一行 <code>publish.py</code> 即可。</p>
+  <div class="sdks">
+   <a class="btn btn-gold" href="sdk/exe_updater.py" download>⬇ EXE 更新模块（Python）</a>
+   <a class="btn btn-gold" href="sdk/UpdateChecker.kt" download>⬇ APK 更新模块（Kotlin）</a>
+   <a class="btn btn-ghost" href="sdk/publish.py" download>⬇ 发版工具 publish.py</a>
+   <button class="btn btn-ghost" id="copySpec">📋 复制清单接口规范</button>
+  </div>
+  <ol>
+   <li><b>EXE（Python 程序）</b>：把 <code>exe_updater.py</code> 放进项目，启动时调用 <code>check_update(appid="你的应用", current_code=1, app_name="你的应用名")</code>，之后每次发版把 current_code 加 1 重新打包。</li>
+   <li><b>APK（安卓程序）</b>：把 <code>UpdateChecker.kt</code> 复制进项目，在 <code>MainActivity.onCreate</code> 调用 <code>UpdateChecker.check(this, "https://ecojia.cn/updates/你的应用/version.json", "你的应用名")</code>，发版时把 build.gradle 里的 versionCode 加 1。</li>
+   <li><b>发版</b>：在本机运行 <code>python publish.py 你的应用 新包路径 版本号 版本名 "更新说明"</code>，包自动上传、清单自动重写，全端下次打开即提示更新。</li>
+  </ol>
+ </div>
+
+ <!-- 使用说明 -->
+ <div class="sec"><span class="sec-no">03</span><span class="sec-t">使用说明</span><span class="sec-line"></span></div>
+ <div class="help">
+  <h3>📖 这个页面是做什么的？</h3>
+  <p>
+   ① <b>普通用户</b>：上面应用卡片里点「下载」即可拿到最新版安装包；已安装的旧版不用管，打开应用时会自动提示升级。
+   ② <b>版本号 code</b><span class="q" data-tip="大白话：给版本编的整数序号（1、2、3…）。客户端靠它比大小判断有没有新版，所以每次发版必须 +1。">?</span> 是更新判断的唯一依据；
+   <b>SHA256</b><span class="q" data-tip="大白话：文件的指纹。下载完成后算一遍指纹和清单里对不上，说明文件被损坏或篡改，客户端会拒绝安装。">?</span> 保证安装包没被篡改。
+   ③ <b>弹窗确认才更新</b>：任何程序都不会偷偷替换你的文件；安卓安装那一步系统一定会再弹一次确认，这是手机系统的安全要求。
+   ④ 本页数据来自开放接口 <b>/updates/apps.json</b>，任何程序都可调用接入。
+  </p>
+ </div>
+
+ <footer class="footer">
+  军哥懂保 · 全栈更新中心 v1.0 ・ 数字生态家园 ECOJIA.CN<br>
+  作者：<b>军哥懂保</b> · 微信：<b>xunijiayuan</b> · 程序大小 <b id="fsSize">—</b> · 更新日期 <b>2026-11-05</b> · 清单元数据更新 <b id="metaUpd">—</b>
+ </footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+function $(id){return document.getElementById(id)}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function toast(m){var t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._tm);t._tm=setTimeout(function(){t.classList.remove('show')},2000)}
+function fmtSize(b){if(!b)return '—';if(b>1048576)return (b/1048576).toFixed(1)+' MB';if(b>1024)return (b/1024).toFixed(1)+' KB';return b+' B'}
+
+fetch('apps.json',{cache:'no-store'}).then(function(r){return r.json()}).then(function(data){
+ $('metaUpd').textContent=(data.meta&&data.meta.updated)||'—';
+ var apps=data.apps||[];
+ /* 逐个拉清单 */
+ Promise.all(apps.map(function(a){
+  return fetch(a.manifest,{cache:'no-store'}).then(function(r){return r.json()}).then(function(m){a._m=m;return a}).catch(function(){a._m=null;return a});
+ })).then(function(list){
+  var apkN=0,exeN=0,published=0,latest='';
+  list.forEach(function(a){var m=a._m;
+   if(a.platform==='apk')apkN++;else exeN++;
+   if(m&&m.url){published++;var u=m.updated||'';if(u>latest)latest=u;}});
+  $('stats').innerHTML=
+   '<div class="stat"><div class="n">'+list.length+'</div><div class="l">已接入应用</div></div>'+
+   '<div class="stat"><div class="n">'+apkN+' / '+exeN+'</div><div class="l">APK 应用 / EXE 应用</div></div>'+
+   '<div class="stat"><div class="n">'+published+'</div><div class="l">已有在线更新包</div></div>'+
+   '<div class="stat"><div class="n">'+(latest||'—')+'</div><div class="l">最近发版日期</div></div>';
+  var html='';
+  list.forEach(function(a){var m=a._m||{};
+   var hasPkg=!!m.url;
+   html+='<div class="app">'+
+    '<span class="plat '+(a.platform==='apk'?'plat-apk':'plat-exe')+'">'+(a.platform==='apk'?'APK 安卓':'EXE 电脑')+'</span>'+
+    '<h3>'+esc(a.name)+'</h3><div class="id">'+esc(a.app)+' · '+esc(a.desc||'')+'</div>'+
+    '<div class="ver"><span>版本 <b>'+(m.versionName?('v'+esc(m.versionName)):'待发布')+'</b></span>'+
+    '<span>code <b>'+(m.versionCode!=null?m.versionCode:'—')+'</b></span>'+
+    '<span>大小 <b>'+fmtSize(m.size)+'</b></span>'+
+    '<span>更新 <b>'+esc(m.updated||'—')+'</b></span></div>'+
+    '<div class="log">'+esc(m.changelog||'尚未发布在线更新包')+'</div>'+
+    '<div class="ops">'+
+    (hasPkg?'<a class="btn btn-gold" href="'+esc(m.url)+'">⬇ 下载最新版</a>':'<span class="btn btn-off">待发布在线包</span>')+
+    (a.home?'<a class="btn btn-ghost" href="'+esc(a.home)+'" target="_blank" rel="noopener">↗ 主页</a>':'')+
+    '<button class="btn btn-ghost" data-m="'+esc(a.manifest)+'" onclick="UC.copyM(this)">📋 清单地址</button>'+
+    '</div></div>';
+  });
+  $('apps').innerHTML=html||'<p style="color:var(--muted)">暂无应用</p>';
+ });
+}).catch(function(e){
+ $('apps').innerHTML='<p style="color:var(--muted)">清单加载失败：'+esc(e.message)+'</p>';
+});
+
+window.UC={copyM:function(btn){
+ var u=btn.getAttribute('data-m');
+ if(navigator.clipboard&&navigator.clipboard.writeText){
+  navigator.clipboard.writeText(u).then(function(){toast('清单地址已复制')},function(){toast('复制失败，请手动选择复制')});
+ }else{toast('当前浏览器不支持一键复制')}
+}};
+
+$('copySpec').onclick=function(){
+ var spec='更新中心接口规范\n全量清单: GET https://ecojia.cn/updates/apps.json\n单应用: GET https://ecojia.cn/updates/<appid>/version.json\n字段: versionCode(整数,递增) / versionName / apkUrl / exeUrl / url / sha256 / size / changelog / mandatory / updated';
+ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(spec).then(function(){toast('接口规范已复制')});}
+ else{toast('当前浏览器不支持一键复制')}
+};
+
+/* 页脚程序大小 */
+var kb=(new Blob([document.documentElement.outerHTML]).size/1024).toFixed(1)+' KB';
+$('fsSize').textContent=kb;
+})();
+</script>
+</body>
+</html>

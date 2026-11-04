@@ -1,0 +1,72 @@
+═══════════════════════════════════════════════════
+  全栈更新中心 · 程序开发对话记录
+  日期：2026年11月5日
+  作者：军哥懂保  微信：xunijiayuan
+═══════════════════════════════════════════════════
+
+【用户需求】
+全栈的 APK 版本和 EXE 版本，如果有迭代新版本都应该自动更新。
+
+【需求确认问答】
+问：落地范围？
+答：统一更新中心 + 接入规范（推荐项被采纳）
+问：检测到新版本后的体验？
+答：弹窗提示，点确认再更新（不静默替换任何文件）
+问：更新包托管在哪？
+答：ecojia.cn 服务器（国内下载快，与清单同域）
+
+【重要发现】
+盘点时发现豆包悬浮球 APK 已有自动更新闭环：
+客户端 UpdateChecker.kt + 发版脚本 upload_update.py +
+服务器 /doubao-ball/version.json（当前 v1.4.2 code=7）。
+本次在其基础上抽象升级为「全栈统一更新中心」，完整兼容
+老客户端（/doubao-ball/ 路径保持不变）。
+
+【建设内容】
+1. 服务器更新中心 /opt/ecojia/updates/（Caddy 静态分发）
+   线上地址：https://ecojia.cn/updates/
+   - apps.json              全量应用清单（开放接口）
+   - <appid>/version.json   单应用清单（版本号/下载地址/SHA256/更新日志）
+   - sdk/                   三个开发者工具（见下）
+2. 门户页 index.html（2027 商用级紫金极光风、三端自适应）：
+   统计卡（接入应用数/APK/EXE/最近发版）、应用卡片（版本/code/
+   大小/更新日志/下载按钮/清单地址一键复制）、开发者接入指引、
+   使用说明、版本 code 与 SHA256 名词"?"大白话解析、作者页脚
+3. SDK 三件套（复制即用）：
+   - exe_updater.py   EXE 通用更新模块（Python 零依赖，3 行接入：
+     启动静默检查→弹窗→确认→下载→SHA256校验→助手批处理替换重启）
+   - UpdateChecker.kt APK 通用更新模块（Kotlin，MainActivity 一行接入，
+     在豆包原版基础上参数化清单地址 + 新增可选 SHA256 校验）
+   - publish.py       一键发版工具（上传包→算指纹→重写清单→线上验证；
+     doubao-ball 自动双写镜像兼容老客户端）
+4. 首批接入 5 个应用：
+   doubao-ball(APK, v1.4.2 在线)、duomaji(EXE, v8 在线)、
+   lead-radar / claims-doc-assistant / fenshen-pangguan
+   （已注册清单，待发布首个在线包后自动生效）
+5. 生态底座登记：ecosystem.json 的 apis 新增 2 条更新中心接口，
+   推送 Gitee（commit ae8a55e），跨 cron 周期不回档
+
+【验证记录】
+- /updates/、apps.json、5 个 version.json、3 个 SDK 全部 200
+- 老端点回归：/doubao-ball/version.json、/mm/、/duomaji/ 均 200
+- Caddy 配置 caddy validate 通过后 reload，已备份
+  （Caddyfile.bak.20261105_updates）
+
+【交付清单】
+全栈更新中心/
+├── index.html          更新中心门户页
+├── apps.json           全量应用清单
+├── sdk/
+│   ├── exe_updater.py    EXE 更新模块
+│   ├── UpdateChecker.kt  APK 更新模块
+│   └── publish.py        一键发版工具
+└── 程序对话记录.txt     本文件
+桌面快捷方式：C:\Users\Administrator\Desktop\程序\全栈更新中心\
+             全栈更新中心-2026年11月05日.lnk
+
+【发版操作指引】
+本机运行（需 pip install paramiko）：
+  python publish.py <appid> <新包路径> <versionCode> <versionName> "<更新说明>"
+例：python publish.py doubao-ball app-release.apk 8 1.5.0 "新增拖动记忆"
+发版后所有旧版客户端下次打开自动弹窗提示更新。
+新程序接入：联系作者军哥懂保（微信 xunijiayuan）注册 appid 即可。
