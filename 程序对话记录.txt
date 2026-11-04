@@ -70,3 +70,21 @@
 例：python publish.py doubao-ball app-release.apk 8 1.5.0 "新增拖动记忆"
 发版后所有旧版客户端下次打开自动弹窗提示更新。
 新程序接入：联系作者军哥懂保（微信 xunijiayuan）注册 appid 即可。
+
+【首个实战接入：客资雷达（2026-11-05 完成）】
+用户确认后执行，全流程跑通：
+1. 克隆 GitHub lzp5133084/ai-lead-radar（源码+bat 便携分发，非单EXE）
+   → exe_updater.py 升级为「双模式」：单EXE替换 / ZIP整包覆盖
+   （publish.py 同步支持 .zip 包）
+2. 接入：仓库新增 eco_updater.py；app.py 加 VERSION_CODE=11，
+   启动时 check_update(appid='lead-radar', install_dir=程序目录)
+   （语法检查通过；GitHub 推送 d2025d5）
+3. 发版：打包 zip(0.4MB) → publish.py lead-radar ... 11 1.1.0
+   → 线上 version.json 生效（含 sha256），zip 下载 200
+4. 模拟客户端拉清单验证 CLIENT_OK
+效果：今后客资雷达每次迭代，运行一行 publish.py 发版，
+   所有装机用户下次打开自动弹窗提示升级（data/ 数据目录不受覆盖影响）
+
+【GitHub 备份】
+更新中心全套（门户页+apps.json+SDK三件套+本记录）已备份至：
+https://github.com/lzp5133084/ecojia-updates
